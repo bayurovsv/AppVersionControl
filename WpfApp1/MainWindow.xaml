@@ -1,0 +1,135 @@
+﻿<Window WindowStyle="None" AllowsTransparency="true"
+        x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Контроль версий приложений" Height="450" Width="800"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="10"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{StaticResource MaterialDesignFont}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Shadows.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <materialDesign:DialogHost Identifier="RootDialog" SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
+        <Grid Background="#FF2D2D30">
+            <ListBox x:Name="ListApps" HorizontalAlignment="Left" Height="383" Margin="10,57,0,0" VerticalAlignment="Top" Width="780" SelectionChanged="ListApps_SelectionChanged" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Margin="10,0,0,0" Content="{Binding ApplicationName}" Foreground="White" FontSize="14" Grid.Column="0"/>
+                            <Label Margin="10,0,0,0" Content="{Binding ApplicationNumber}" Foreground="White" FontSize="14" Grid.Column="1"/>
+                            <Label Margin="10,0,0,0" x:Name="Flag" Content="{Binding FlagUpdate}"  Foreground="White" FontSize="14" Grid.Column="2"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuButton, Path=IsChecked}">
+                <materialDesign:DrawerHost.LeftDrawerContent>
+                    <DockPanel MinWidth="100">
+                        <StackPanel Background="#FF2D2D30">
+                            <Button Click="AddApp_Click" Background="#FF3F3F46" BorderBrush="#FF3F3F46" >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock>Добавить приложение</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Click="Setting_Click" Background="#FF3F3F46" BorderBrush="#FF3F3F46" >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock>Настройки</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Click="Admins_Click" Background="#FF3F3F46" BorderBrush="#FF3F3F46" >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock>Администрирование</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </DockPanel>
+                </materialDesign:DrawerHost.LeftDrawerContent>
+                <materialDesign:ColorZone Padding="5"
+                                         Mode="PrimaryMid"
+                                         DockPanel.Dock="Top"
+                                         MaxHeight="100"
+                                         materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="#FF3F3F46" MouseDown="ColorZone_MouseDown">
+                    <DockPanel>
+                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                          IsChecked="False"
+                          Margin="14,0,0,0"
+                          x:Name="MenuButton" />
+                        <TextBlock VerticalAlignment="Center"
+                       FontSize="20"
+                       Margin="13,0,0,0"
+                       FontWeight="SemiBold" ><Run Text="Контроль версий приложений"/></TextBlock>
+                        <!--#region Управление формой-->
+                        <!-- Закрыть -->
+                        <Button Height="20" Width="20" DockPanel.Dock="Right" Margin="0,-2,0,0" Click="BdClose_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="BdClose" Background="Transparent">
+                                        <Path x:Name="Pt" Data="M 0,0 M 0.2,0.2 L 0.8,0.8 M 0.2,0.8 L 0.8,0.2 M 1,1"
+                      Stretch="Uniform" Stroke="Black" StrokeThickness="2"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="BdClose" Property="Background" Value="#FF252526"/>
+                                            <Setter TargetName="Pt" Property="Stroke" Value="White"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <!-- Развернуть -->
+                        <Button Height="20" Width="20"  DockPanel.Dock="Right" Margin="0,-2,2,0" Click="BdСollapse_Click" >
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="BdСollapse" Background="Transparent">
+                                        <Path x:Name="Pt" Data="M 1,1 M 0.2,0.2 L 0.8,0.2  M 0.2,0.8 L 0.8,0.8 M 0,1  M 0.8,0.15 L 0.8,0.85 M 1,0  M 0.2,0.15 L 0.2,0.85 M 0,1"
+                      Stretch="Uniform" Stroke="Black" StrokeThickness="2"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="BdСollapse" Property="Background" Value="#FF252526"/>
+                                            <Setter TargetName="Pt" Property="Stroke" Value="White"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <!-- Свернуть -->
+                        <Button Height="20" Width="20" HorizontalAlignment="Right" Margin="0,-2,0,0" Click="Btn_min_click" >
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Bd" Background="Transparent">
+                                        <Path x:Name="Pt" Data="M0, 0 M0.05,0 L 0.95 0  "
+                      Stretch="Uniform" Stroke="Black" StrokeThickness="2"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="#FF252526"/>
+                                            <Setter TargetName="Pt" Property="Stroke" Value="White"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <!--#endregion-->
+                    </DockPanel>
+                </materialDesign:ColorZone>
+            </materialDesign:DrawerHost>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>
